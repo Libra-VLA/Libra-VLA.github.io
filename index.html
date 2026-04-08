@@ -267,14 +267,339 @@
     </div>
 </div>
 
-<!-- ═══════════════════ TEASER ═══════════════════ -->
+<!-- ═══════════════════ TEASER (JS-Animated) ═══════════════════ -->
 <div class="container-wide" style="margin-top: 1.5rem;">
-    <div class="figure">
-        <img src="./figs/param_v3.png" alt="Comparison of action generation paradigms">
-        <div class="figure-caption">
-            <strong>Comparison of action generation paradigms.</strong> (a) Discrete autoregressive approaches discretize actions into massive bins. (b) Continuous diffusion approaches directly predict continuous signals. (c) Our <strong>Libra-VLA</strong> operates in a hybrid action space, where discrete coarse bins serve as anchors for continuous fine actions.
+    <div style="background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+        <canvas id="paradigm-canvas" style="width: 100%; height: auto; display: block;"></canvas>
+        <div style="text-align: center; margin-top: 8px;">
+            <button onclick="window._paradigmReplay && window._paradigmReplay()" style="font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:600; padding:5px 16px; border:1px solid var(--border); border-radius:999px; background:#fff; color:var(--text-secondary); cursor:pointer;">&#8635; Replay</button>
+        </div>
+        <div class="figure-caption" style="margin-top: 10px;">
+            <strong>Comparison of action generation paradigms.</strong> (a) Discrete autoregressive approaches discretize actions into massive bins. (b) Continuous diffusion approaches directly predict continuous signals. (c) Our <strong>Libra-VLA</strong> operates in a hybrid action space: the Semantic Planner first predicts 6 coarse bins in a single pass, then the Action Refiner generates fine actions within each bin across two asynchronous rounds.
         </div>
     </div>
+    <script>
+    (function() {
+        const canvas = document.getElementById('paradigm-canvas');
+        const ctx = canvas.getContext('2d');
+        const DPR = window.devicePixelRatio || 1;
+        const W = 900, H = 310;
+        canvas.width = W * DPR; canvas.height = H * DPR;
+        canvas.style.aspectRatio = W + '/' + H;
+        ctx.scale(DPR, DPR);
+
+        const PW = 265, PT = 45, PB = 205;
+        const plotH = PB - PT; // 160px
+
+        // 6 coarse bins: wave pattern UP,DOWN,UP,UP,UP — all same size
+        // Adjacent bins touch at corner points, no overlap
+        const binBounds = [
+            { top: 0.725, bot: 0.95 },  // bin 0: low start
+            { top: 0.50, bot: 0.725 },  // bin 1: UP (first peak) — shares 0.725
+            { top: 0.725, bot: 0.95 },  // bin 2: DOWN (dip)     — shares 0.725
+            { top: 0.50, bot: 0.725 },  // bin 3: UP (rising)    — shares 0.725
+            { top: 0.275, bot: 0.50 },  // bin 4: UP (rising)    — shares 0.50
+            { top: 0.05, bot: 0.275 },  // bin 5: UP (2nd peak)  — shares 0.275
+        ];
+
+        function binCY(i) { return PT + ((binBounds[i].top + binBounds[i].bot) / 2) * plotH; }
+        function binTop(i) { return PT + binBounds[i].top * plotH; }
+        function binBot(i) { return PT + binBounds[i].bot * plotH; }
+
+        // Fine action curve: wave shape UP→DOWN→UP, second peak higher
+        // Matches param_v3.png reference
+        const curvePts = [
+            { t: 0, y: 0.88 },         // start low in bin 0
+            { t: 0.083, y: 0.77 },     // ascending in bin 0
+            { t: 0.167, y: 0.61 },     // entering bin 1
+            { t: 0.25, y: 0.57 },      // first peak area (bin 1)
+            { t: 0.333, y: 0.68 },     // descending into bin 2
+            { t: 0.417, y: 0.82 },     // valley (bin 2)
+            { t: 0.5, y: 0.77 },       // rising from valley (bin 3)
+            { t: 0.583, y: 0.64 },     // ascending in bin 3
+            { t: 0.7, y: 0.43 },       // entering bin 4
+            { t: 0.833, y: 0.23 },     // ascending in bin 4-5
+            { t: 0.917, y: 0.12 },     // second peak area (bin 5)
+            { t: 1, y: 0.10 },         // end high in bin 5
+        ];
+
+        // Catmull-Rom interpolation for smooth curve
+        function catmullRom(p0, p1, p2, p3, t) {
+            const t2 = t * t, t3 = t2 * t;
+            return 0.5 * ((2*p1) + (-p0+p2)*t + (2*p0-5*p1+4*p2-p3)*t2 + (-p0+3*p1-3*p2+p3)*t3);
+        }
+
+        function curveNorm(t) {
+            // Find segment
+            const pts = curvePts;
+            let seg = 0;
+            for (let i = 0; i < pts.length - 1; i++) {
+                if (t >= pts[i].t && t <= pts[i+1].t) { seg = i; break; }
+                if (i === pts.length - 2) seg = i;
+            }
+            const lt = (t - pts[seg].t) / (pts[seg+1].t - pts[seg].t || 0.001);
+            const i0 = Math.max(0, seg - 1);
+            const i1 = seg;
+            const i2 = Math.min(pts.length - 1, seg + 1);
+            const i3 = Math.min(pts.length - 1, seg + 2);
+            return catmullRom(pts[i0].y, pts[i1].y, pts[i2].y, pts[i3].y, lt);
+        }
+
+        function curveY(t) { return PT + curveNorm(t) * plotH; }
+        const CYCLE = 9000;
+        let startTime = performance.now();
+
+        // Noise seeds for panel (b) and (c)
+        let noiseB = [], noiseC1 = [], noiseC2 = [];
+        function initNoise() {
+            noiseB = []; noiseC1 = []; noiseC2 = [];
+            for (let i = 0; i < 40; i++) noiseB.push({ dx: (Math.random()-0.5)*70, dy: (Math.random()-0.5)*90 });
+            for (let i = 0; i < 20; i++) noiseC1.push({ dx: (Math.random()-0.5)*50, dy: (Math.random()-0.5)*70 });
+            for (let i = 0; i < 20; i++) noiseC2.push({ dx: (Math.random()-0.5)*50, dy: (Math.random()-0.5)*70 });
+        }
+        initNoise();
+
+        function ease(t) { return 1 - Math.pow(1-t, 3); }
+        function cl(t) { return Math.max(0, Math.min(1, t)); }
+
+        function rr(x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+            ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+            ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+            ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+        }
+
+        // Draw smooth curve segment
+        function drawCurve(xOff, tStart, tEnd, steps, progress) {
+            ctx.beginPath();
+            const n = Math.floor(steps * progress);
+            for (let i = 0; i <= n; i++) {
+                const t = tStart + (i / steps) * (tEnd - tStart);
+                const px = xOff + 15 + ((t - tStart) / (tEnd - tStart)) * (PW - 30);
+                const py = curveY(t);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+
+        // Draw noise dots converging to curve
+        function drawNoise(seeds, xOff, tStart, tEnd, convergence, alpha) {
+            if (alpha < 0.01) return;
+            ctx.globalAlpha = alpha;
+            const mix = ease(cl(convergence));
+            for (let i = 0; i < seeds.length; i++) {
+                const nt = tStart + (i / (seeds.length - 1)) * (tEnd - tStart);
+                const tx = xOff + 15 + ((nt - tStart) / (tEnd - tStart)) * (PW - 30);
+                const ty = curveY(nt);
+                const nx = tx + seeds[i].dx * (1 - mix);
+                const ny = ty + seeds[i].dy * (1 - mix);
+                ctx.fillStyle = '#e84393';
+                ctx.beginPath(); ctx.arc(nx, ny, 2.5 - mix, 0, Math.PI * 2); ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+        }
+
+        /*
+         * Timeline (fraction of CYCLE):
+         * 0.00-0.20  (a) bins appear
+         * 0.20-0.42  (b) noise appears → converges → curve draws
+         * 0.42-0.52  (c) coarse bins appear
+         * 0.52-0.68  (c) round1: noise left half → converge → fine line left
+         * 0.70-0.86  (c) round2: noise right half → converge → fine line right
+         * 0.86-1.00  hold
+         */
+
+        function draw() {
+            const t = ((performance.now() - startTime) % CYCLE) / CYCLE;
+            ctx.clearRect(0, 0, W, H);
+
+            // Backgrounds
+            ctx.fillStyle = '#f8f9ff'; rr(15, 10, PW, 200, 4); ctx.fill();
+            ctx.fillStyle = '#fff5f5'; rr(315, 10, PW, 200, 4); ctx.fill();
+            ctx.fillStyle = '#f8f5ff'; rr(615, 10, PW, 200, 4); ctx.fill();
+
+            // Dividers
+            ctx.setLineDash([4,3]); ctx.strokeStyle = '#ddd'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(300,5); ctx.lineTo(300,215); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(600,5); ctx.lineTo(600,215); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // ── Legends (top-left of each panel, small, above plot area) ──
+            ctx.font = '500 9px Inter, sans-serif';
+            // (a) legend
+            ctx.fillStyle = '#93c5fd'; rr(22, 16, 10, 10, 2); ctx.fill();
+            ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 0.5; rr(22, 16, 10, 10, 2); ctx.stroke();
+            ctx.fillStyle = '#888'; ctx.textAlign = 'left'; ctx.fillText('Action Bin', 36, 25);
+            // (b) legend
+            ctx.strokeStyle = '#e84393'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(322, 21); ctx.lineTo(340, 21); ctx.stroke();
+            ctx.fillStyle = '#888'; ctx.fillText('Action', 346, 25);
+            // (c) legend
+            ctx.setLineDash([2,1]); ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 0.8;
+            rr(622, 14, 10, 10, 2); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = 'rgba(219,234,254,0.4)'; rr(622, 14, 10, 10, 2); ctx.fill();
+            ctx.fillStyle = '#888'; ctx.fillText('Coarse Bin', 636, 23);
+            ctx.strokeStyle = '#e84393'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(622, 35); ctx.lineTo(634, 35); ctx.stroke();
+            ctx.fillStyle = '#888'; ctx.fillText('Fine Action', 638, 39);
+
+            // ═══ Panel (a): Discrete bins ═══ (phase 0~0.20)
+            const aP = cl(t / 0.20);
+            for (let i = 0; i < 19; i++) {
+                const bp = cl((aP - i/19*0.75) / 0.25);
+                if (bp <= 0) continue;
+                const nt = i / 18;
+                const bx = 15 + 14 + nt * (PW - 38);
+                const by = curveY(nt) - 5.5;
+                ctx.globalAlpha = ease(bp);
+                ctx.fillStyle = '#93c5fd'; rr(bx, by, 11, 11, 2); ctx.fill();
+                ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 0.5; rr(bx, by, 11, 11, 2); ctx.stroke();
+            }
+            ctx.globalAlpha = 1;
+
+            // ═══ Panel (b): Noise → curve ═══ (phase 0.20~0.42)
+            const bStart = 0.20, bEnd = 0.42;
+            const bP = cl((t - bStart) / (bEnd - bStart));
+
+            // Noise dots: appear at bP=0, converge by bP=0.6, fade by bP=0.8
+            if (bP > 0) {
+                const nAlpha = bP < 0.7 ? Math.min(0.6, bP * 2) : Math.max(0, 0.6 - (bP - 0.7) * 2);
+                drawNoise(noiseB, 315, 0, 1, bP * 1.5, nAlpha);
+            }
+
+            // Curve: starts at bP=0.35, fully drawn by bP=1.0
+            if (bP > 0.35) {
+                const curveP = cl((bP - 0.35) / 0.65);
+                ctx.strokeStyle = '#e84393'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+                drawCurve(315, 0, 1, 120, ease(curveP));
+            }
+
+            // ═══ Panel (c): Coarse bins → noise/diffuse round1 → round2 ═══
+            // Coarse bins: phase 0.42~0.52 — staircase layout
+            const cBinP = cl((t - 0.42) / 0.10);
+            const binMargin = 8;
+            const binW = Math.floor((PW - 2 * binMargin) / 6);  // equal width, side by side
+            const binsXStart = 615 + binMargin;
+            const binsXEnd = binsXStart + 6 * binW;
+
+            for (let i = 0; i < 6; i++) {
+                const bp = cl((cBinP - i * 0.1) / 0.3);
+                if (bp <= 0) continue;
+                const bx = binsXStart + i * binW;
+                const bTop = binTop(i);
+                const bBot = binBot(i);
+                const bH = bBot - bTop;
+                ctx.globalAlpha = ease(bp);
+                ctx.fillStyle = 'rgba(219,234,254,0.4)'; rr(bx, bTop, binW, bH, 3); ctx.fill();
+                ctx.setLineDash([4,2]); ctx.strokeStyle = '#60a5fa'; ctx.lineWidth = 1;
+                rr(bx, bTop, binW, bH, 3); ctx.stroke(); ctx.setLineDash([]);
+            }
+            ctx.globalAlpha = 1;
+
+            // Helper: draw fine curve aligned to bins x range
+            function drawFineCurve(tS, tE, steps, progress) {
+                ctx.beginPath();
+                const n = Math.floor(steps * progress);
+                for (let i = 0; i <= n; i++) {
+                    const nt = tS + (i / steps) * (tE - tS);
+                    const px = binsXStart + (nt * (binsXEnd - binsXStart));
+                    const py = curveY(nt);
+                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+                ctx.stroke();
+            }
+
+            // Round 1 (left half t=0~0.5): noise 0.52~0.60, curve 0.58~0.68
+            const r1noise = cl((t - 0.52) / 0.08);
+            const r1curve = cl((t - 0.58) / 0.10);
+            if (r1noise > 0) {
+                const nA = r1noise < 0.7 ? Math.min(0.6, r1noise * 2) : Math.max(0, 0.6 - (r1curve) * 0.8);
+                // Noise only in left half bins
+                ctx.globalAlpha = nA;
+                const mix = ease(cl(r1noise * 1.8));
+                for (let i = 0; i < noiseC1.length; i++) {
+                    const nt = (i / (noiseC1.length - 1)) * 0.5;
+                    const tx = binsXStart + nt * (binsXEnd - binsXStart);
+                    const ty = curveY(nt);
+                    const nx = tx + noiseC1[i].dx * (1 - mix);
+                    const ny = ty + noiseC1[i].dy * (1 - mix);
+                    ctx.fillStyle = '#e84393';
+                    ctx.beginPath(); ctx.arc(nx, ny, 2.5 - mix, 0, Math.PI * 2); ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            }
+            if (r1curve > 0) {
+                ctx.strokeStyle = '#e84393'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+                drawFineCurve(0, 0.5, 60, ease(r1curve));
+            }
+
+            // Round 2 (right half t=0.5~1.0): noise 0.70~0.78, curve 0.76~0.86
+            const r2noise = cl((t - 0.70) / 0.08);
+            const r2curve = cl((t - 0.76) / 0.10);
+            if (r2noise > 0) {
+                const nA = r2noise < 0.7 ? Math.min(0.6, r2noise * 2) : Math.max(0, 0.6 - (r2curve) * 0.8);
+                ctx.globalAlpha = nA;
+                const mix = ease(cl(r2noise * 1.8));
+                for (let i = 0; i < noiseC2.length; i++) {
+                    const nt = 0.5 + (i / (noiseC2.length - 1)) * 0.5;
+                    const tx = binsXStart + nt * (binsXEnd - binsXStart);
+                    const ty = curveY(nt);
+                    const nx = tx + noiseC2[i].dx * (1 - mix);
+                    const ny = ty + noiseC2[i].dy * (1 - mix);
+                    ctx.fillStyle = '#e84393';
+                    ctx.beginPath(); ctx.arc(nx, ny, 2.5 - mix, 0, Math.PI * 2); ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            }
+            if (r2curve > 0) {
+                ctx.strokeStyle = '#e84393'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+                drawFineCurve(0.5, 1.0, 60, ease(r2curve));
+            }
+
+            // ── Module Boxes ──
+            ctx.globalAlpha = 1; ctx.textAlign = 'center';
+            // (a)
+            ctx.fillStyle = '#fef9c3'; rr(30, 228, 240, 32, 6); ctx.fill();
+            ctx.strokeStyle = '#eab308'; ctx.lineWidth = 1; rr(30, 228, 240, 32, 6); ctx.stroke();
+            ctx.fillStyle = '#713f12'; ctx.font = '700 12px Inter, sans-serif'; ctx.fillText('VLM', 150, 249);
+            // (b)
+            ctx.fillStyle = '#fef9c3'; rr(315, 228, 140, 32, 6); ctx.fill();
+            ctx.strokeStyle = '#eab308'; rr(315, 228, 140, 32, 6); ctx.stroke();
+            ctx.fillStyle = '#713f12'; ctx.font = '700 12px Inter, sans-serif'; ctx.fillText('VLM', 385, 249);
+            ctx.fillStyle = '#dbeafe'; rr(460, 228, 120, 32, 6); ctx.fill();
+            ctx.strokeStyle = '#60a5fa'; rr(460, 228, 120, 32, 6); ctx.stroke();
+            ctx.fillStyle = '#1e40af'; ctx.font = '700 11px Inter, sans-serif'; ctx.fillText('Action Expert', 520, 249);
+            // (c) with highlights
+            const planOn = t > 0.42 && t < 0.54;
+            const refOn = t > 0.52 && t < 0.88;
+            ctx.fillStyle = '#fef9c3'; rr(622, 228, 85, 32, 6); ctx.fill();
+            ctx.strokeStyle = '#eab308'; ctx.lineWidth = 1; rr(622, 228, 85, 32, 6); ctx.stroke();
+            ctx.fillStyle = '#713f12'; ctx.font = '700 11px Inter, sans-serif'; ctx.fillText('VLM', 664, 249);
+
+            ctx.globalAlpha = planOn ? 1 : 0.45;
+            ctx.fillStyle = '#fef9c3'; rr(712, 228, 78, 32, 6); ctx.fill();
+            ctx.strokeStyle = planOn ? '#eab308' : '#ccc'; ctx.lineWidth = planOn ? 1.5 : 1; rr(712, 228, 78, 32, 6); ctx.stroke();
+            ctx.fillStyle = '#713f12'; ctx.font = '700 10px Inter, sans-serif'; ctx.fillText('Planner', 751, 249);
+            ctx.globalAlpha = 1;
+
+            ctx.globalAlpha = refOn ? 1 : 0.45;
+            ctx.fillStyle = '#dbeafe'; rr(795, 228, 78, 32, 6); ctx.fill();
+            ctx.strokeStyle = refOn ? '#7c3aed' : '#ccc'; ctx.lineWidth = refOn ? 1.5 : 1; rr(795, 228, 78, 32, 6); ctx.stroke();
+            ctx.fillStyle = '#4c1d95'; ctx.font = '700 10px Inter, sans-serif'; ctx.fillText('Refiner', 834, 249);
+            ctx.globalAlpha = 1;
+
+            // Labels
+            ctx.fillStyle = '#555'; ctx.font = '700 14px Inter, sans-serif';
+            ctx.fillText('( a )', 150, 285); ctx.fillText('( b )', 450, 285); ctx.fillText('( c )', 750, 285);
+
+            requestAnimationFrame(draw);
+        }
+
+        window._paradigmReplay = function() { startTime = performance.now(); initNoise(); };
+        requestAnimationFrame(draw);
+    })();
+    </script>
 </div>
 
 <div class="container"><hr class="divider"></div>
