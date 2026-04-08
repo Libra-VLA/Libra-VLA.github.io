@@ -45,14 +45,14 @@
         .header .badge {
             display: inline-block;
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
+            font-size: 1rem;
             font-weight: 700;
             letter-spacing: 0.05em;
             color: var(--accent);
             background: var(--accent-light);
             padding: 4px 14px;
             border-radius: 999px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         .header h1 {
             font-family: 'Inter', sans-serif;
@@ -252,8 +252,17 @@
 <div class="header">
     <div class="badge">ACL 2026</div>
     <h1>Libra-VLA: Achieving Learning Equilibrium<br>via Asynchronous Coarse-to-Fine Dual-System</h1>
-    <div class="authors">
-        <span style="color: var(--text-light); font-style: italic;">Authors (under review)</span>
+    <div class="authors" style="font-size: 1.1rem;">
+        Yifei Wei<sup>1,2</sup>&ensp;
+        Linqing Zhong<sup>1,2</sup>&ensp;
+        Yi Liu<sup>2</sup>&ensp;
+        Yuxiang Lu<sup>2</sup>&ensp;
+        Xindong He<sup>2</sup>&ensp;
+        Maoqing Yao<sup>2*</sup>&ensp;
+        Guanghui Ren<sup>2*</sup>
+    </div>
+    <div style="font-family:'Inter',sans-serif; font-size:0.95rem; color:var(--text-light); margin-top:4px;">
+        <sup>1</sup>Beihang University&ensp;&ensp;<sup>2</sup>AgiBot&ensp;&ensp;<span style="font-size:0.82rem;">* Corresponding authors</span>
     </div>
     <div class="btn-row">
         <a class="btn" href="#">
@@ -275,7 +284,7 @@
             <button onclick="window._paradigmReplay && window._paradigmReplay()" style="font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:600; padding:5px 16px; border:1px solid var(--border); border-radius:999px; background:#fff; color:var(--text-secondary); cursor:pointer;">&#8635; Replay</button>
         </div>
         <div class="figure-caption" style="margin-top: 10px;">
-            <strong>Comparison of action generation paradigms.</strong> (a) Discrete autoregressive approaches discretize actions into massive bins. (b) Continuous diffusion approaches directly predict continuous signals. (c) Our <strong>Libra-VLA</strong> operates in a hybrid action space: the Semantic Planner first predicts 6 coarse bins in a single pass, then the Action Refiner generates fine actions within each bin across two asynchronous rounds.
+            <strong>Comparison of action generation paradigms.</strong> (a) Discrete autoregressive approaches discretize actions into massive bins. (b) Continuous diffusion approaches directly predict continuous signals. (c) Our proposed <strong>Libra-VLA</strong> operates in a hybrid action space, where discrete coarse bins representing macro-intents serve as anchors for continuous fine actions, naturally aligning with the inherent hierarchical characteristics.
         </div>
     </div>
     <script>
@@ -609,7 +618,7 @@
     <h2 class="section-title">Abstract</h2>
     <div class="abstract-text">
         <p>
-            Vision-Language-Action (VLA) models have emerged as a promising paradigm for generalist robotic manipulation by grounding high-level semantic instructions into executable physical actions. However, prevailing approaches typically adopt a <em>monolithic generation paradigm</em>, attempting to map high-level visual-linguistic features directly to high-frequency motor commands in a flat, non-hierarchical fashion. This strategy overlooks the inherent hierarchy of robotic manipulation, where complex actions can be naturally modeled in a <strong>Hybrid Action Space</strong>, decomposing into <em>discrete</em> macro-directional reaching and <em>continuous</em> micro-pose alignment.
+            Vision-Language-Action (VLA) models have emerged as a promising paradigm for generalist robotic manipulation by grounding high-level semantic instructions into executable physical actions. However, prevailing approaches typically adopt a <em>monolithic generation paradigm</em>, attempting to map high-level visual-linguistic features directly to high-frequency motor commands in a flat, non-hierarchical fashion. This strategy overlooks the inherent hierarchy of robotic manipulation, where complex actions can be naturally modeled in a <strong>Hybrid Action Space</strong>, decomposing into <em>discrete</em> macro-directional reaching and <em>continuous</em> micro-pose alignment. Bypassing this structural hierarchy widens the semantic-actuation gap, compelling models to rely on cross-modal alignment via massive-scale robotic pre-training to bridge the gap.
         </p>
         <p>
             To address this, we introduce <strong>Libra-VLA</strong>, a novel Coarse-to-Fine Dual-System VLA architecture. Our core insight is twofold: we explicitly decouple the learning complexity into a coarse-to-fine hierarchy to strike a <strong>training equilibrium</strong>, while simultaneously leveraging this structural modularity to implement an <strong>asynchronous execution strategy</strong>. Specifically, our architecture integrates: (1) <strong>Semantic Planner</strong>, which focuses on macro-intent, predicting discrete action tokens that guide the robot's general direction, and (2) <strong>Action Refiner</strong>, which conditions on the coarse intent to generate high-frequency continuous actions for precise pose alignment.
@@ -630,8 +639,8 @@
         <img src="./figs/arch_v4.png" alt="Libra-VLA Architecture">
         <div class="figure-caption">
             <strong>Architectural Overview of Libra-VLA.</strong>
-            (Left) <strong>System 2: Semantic Planner</strong> runs at low frequency, employing a VLM backbone with a Parallel Coarse-Action Head to predict discrete macro-directional intents.
-            (Right) <strong>System 1: Action Refiner</strong> runs at high frequency, utilizing a Diffusion Transformer with an independent visual encoder to synthesize continuous micro-pose alignments.
+            (Left) <strong>System 2: Semantic Planner</strong> runs at low frequency, predicting discrete macro-directional intents.
+            (Right) <strong>System 1: Action Refiner</strong> runs at high frequency, synthesizing continuous micro-pose alignments.
             The two systems are bridged via an asynchronous execution strategy managed by an intent buffer.
         </div>
     </div>
@@ -639,7 +648,10 @@
     <div class="container" style="margin-top: 1.5rem;">
         <div class="method-text">
             <p>
-                We factorize the joint policy distribution into two conditional stages. The <strong>Semantic Planner</strong> (System 2) leverages a pre-trained VLM (InternVL2.5-2B) to predict coarse directional tokens via parallel decoding, trained with Cross-Entropy loss. The <strong>Action Refiner</strong> (System 1) employs a Diffusion Transformer with an independent SigLIP visual encoder, conditioned on the planner's macro-intent to synthesize precise continuous actions, trained with MSE loss.
+                We factorize the joint policy distribution into two conditional stages. The <strong>Semantic Planner</strong> (System 2) leverages a pre-trained VLM to predict coarse directional tokens via a <strong>Parallel Coarse-Action Head</strong>, trained with Cross-Entropy loss. To align physical control with the VLM's semantic space, we discretize normalized continuous actions into <em>N</em> uniform bins. These discrete tokens serve as <em>coarse actions</em> representing macro-directional intents rather than precise kinematics, naturally aligning with the VLM's semantic reasoning capabilities.
+            </p>
+            <p style="margin-top: 1rem;">
+                The <strong>Action Refiner</strong> (System 1) operates as a conditional diffusion policy that refines the coarse intent into executable precise motions. To furnish fine-grained visual representations for precise actuation while achieving structural decoupling, the <strong>Fine-Action Head</strong> is augmented with an independent visual encoder to extract geometric features. The Fine-Action Head conditions on the composite input of noisy actions, geometric features, and macro-intent embeddings to iteratively reverse the diffusion process.
             </p>
             <p style="margin-top: 1rem;">
                 The <strong>asynchronous execution strategy</strong> further decouples inference costs: the Semantic Planner predicts an extended macro-horizon <em>L<sub>macro</sub> = M &times; H<sub>chunk</sub></em> in a single pass, filling an intent buffer (FIFO queue). The Action Refiner then operates at high frequency by consuming buffered intents, significantly reducing average inference latency.
@@ -717,8 +729,8 @@
     <div style="margin-top: 2.5rem;"></div>
 
     <!-- ── Ablation: Libra Point ── -->
-    <h3 class="subsection-title">Ablation: The "Libra Point"</h3>
-    <p class="section-note">Performance follows an inverted-U curve relative to bin granularity (<em>N</em>). The learning equilibrium is at <strong>N=10</strong>, where coarse tokens provide sufficient guidance without overwhelming the planner.</p>
+    <h3 class="subsection-title">Ablation: Intent Granularity</h3>
+    <p class="section-note">Performance follows an inverted-U curve relative to bin granularity (<em>N</em>). The learning equilibrium is achieved where coarse tokens provide sufficient guidance without overwhelming the planner.</p>
 
     <!-- Interactive Balance Visualization -->
     <div style="max-width: 760px; margin: 0 auto 2.5rem; padding: 0 16px;">
@@ -1050,8 +1062,8 @@
     <div style="margin-top: 2.5rem;"></div>
 
     <!-- ── Ablation: Architectural Components ── -->
-    <h3 class="subsection-title">Ablation: Architectural Components</h3>
-    <p class="section-note">The Coarse-to-Fine paradigm (Refine) is the primary performance driver (+6.8%), while the independent Visual Encoder (VE) provides further gains through structural decoupling.</p>
+    <h3 class="subsection-title">Ablation: Architectural Effectiveness</h3>
+    <p class="section-note">The Coarse-to-Fine paradigm (Refine) is the primary performance driver, while the independent Visual Encoder (VE) provides further gains through structure and feature decoupling.</p>
 
     <div class="container">
         <div class="table-wrap">
@@ -1071,9 +1083,9 @@
 
     <div style="margin-top: 2.5rem;"></div>
 
-    <!-- ── Ablation: Asynchronous Execution ── -->
-    <h3 class="subsection-title">Ablation: Asynchronous Execution</h3>
-    <p class="section-note">Increasing the Horizon Expansion Factor (<em>M</em>) substantially reduces inference latency while maintaining high success rates, thanks to the spatial tolerance of coarse quantization.</p>
+    <!-- ── Asynchronous Execution ── -->
+    <h3 class="subsection-title">Asynchronous Execution</h3>
+    <p class="section-note">Increasing the Horizon Expansion Factor (<em>M</em>) substantially reduces inference latency while maintaining high success rates, thanks to the spatial tolerance of coarse quantization. Baseline (Libra-Base) inference latency: 220ms on RTX 4090.</p>
 
     <div class="container">
         <div class="table-wrap">
@@ -1089,7 +1101,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="table-note">Baseline (Libra-Base) inference latency: 220ms on RTX 4090.</div>
     </div>
 </div>
 
