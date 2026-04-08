@@ -35,15 +35,13 @@
 
         img { max-width: 100%; height: auto; display: block; }
 
-        /* Layout */
         .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
         .container-wide { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
-        /* Divider */
-        .divider { border: none; border-top: 1px solid var(--border); margin: 3.5rem 0; }
+        .divider { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
 
         /* Header */
-        .header { text-align: center; padding: 3rem 24px 2.5rem; border-bottom: 1px solid var(--border); }
+        .header { text-align: center; padding: 2.5rem 24px 2rem; border-bottom: 1px solid var(--border); }
         .header .badge {
             display: inline-block;
             font-family: 'Inter', sans-serif;
@@ -54,7 +52,7 @@
             background: var(--accent-light);
             padding: 4px 14px;
             border-radius: 999px;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
         .header h1 {
             font-family: 'Inter', sans-serif;
@@ -63,7 +61,7 @@
             line-height: 1.15;
             letter-spacing: -0.02em;
             color: var(--text);
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
         .authors {
             font-family: 'Inter', sans-serif;
@@ -71,13 +69,7 @@
             color: var(--text-secondary);
             margin-bottom: 0.4rem;
         }
-        .affiliations {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.82rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-        }
-        .btn-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 1.2rem; }
+        .btn-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 1rem; }
         .btn {
             font-family: 'Inter', sans-serif;
             font-size: 0.82rem;
@@ -123,7 +115,7 @@
         }
 
         /* Figures */
-        .figure { margin: 2rem 0; }
+        .figure { margin: 1.5rem 0; }
         .figure img { border: 1px solid var(--border); border-radius: 8px; }
         .figure-caption {
             font-family: 'Inter', sans-serif;
@@ -195,63 +187,19 @@
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
 
-        /* Bar chart for Libra Point */
-        .bar-chart {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 24px;
-            height: 170px;
-            padding: 0 20px;
-            margin: 1.5rem auto;
-            max-width: 450px;
-        }
-        .bar-item { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
-        .bar-value { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700; }
-        .bar-fill { width: 100%; border-radius: 4px 4px 0 0; }
-        .bar-label { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 700; text-align: center; }
-        .bar-sublabel { font-family: 'Inter', sans-serif; font-size: 0.58rem; color: var(--accent); margin-top: 1px; }
-        .bar-axis {
-            display: flex;
-            justify-content: space-between;
-            max-width: 450px;
-            margin: 0.3rem auto 0;
-            padding: 0 20px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.6rem;
-            color: var(--text-light);
-        }
-
-        /* BibTeX */
-        .bibtex-box {
-            position: relative;
+        /* Citation placeholder */
+        .citation-placeholder {
             background: var(--bg-light);
-            border: 1px solid var(--border);
+            border: 1px dashed var(--border);
             border-radius: 8px;
-            padding: 1.2rem 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--text-secondary);
-            white-space: pre-wrap;
-            word-break: break-all;
+            padding: 2rem;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-light);
+            font-size: 0.88rem;
             line-height: 1.6;
         }
-        .copy-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.68rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            background: white;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .citation-placeholder strong { color: var(--text-secondary); font-weight: 700; }
 
         footer {
             text-align: center;
@@ -286,7 +234,7 @@
 </div>
 
 <!-- ═══════════════════ TEASER ═══════════════════ -->
-<div class="container-wide" style="margin-top: 2.5rem;">
+<div class="container-wide" style="margin-top: 1.5rem;">
     <div class="figure">
         <img src="./figs/param_v3.png" alt="Comparison of action generation paradigms">
         <div class="figure-caption">
@@ -305,7 +253,7 @@
             Vision-Language-Action (VLA) models have emerged as a promising paradigm for generalist robotic manipulation by grounding high-level semantic instructions into executable physical actions. However, prevailing approaches typically adopt a <em>monolithic generation paradigm</em>, attempting to map high-level visual-linguistic features directly to high-frequency motor commands in a flat, non-hierarchical fashion. This strategy overlooks the inherent hierarchy of robotic manipulation, where complex actions can be naturally modeled in a <strong>Hybrid Action Space</strong>, decomposing into <em>discrete</em> macro-directional reaching and <em>continuous</em> micro-pose alignment.
         </p>
         <p>
-            To address this, we introduce <strong>Libra-VLA</strong>, a novel Coarse-to-Fine Dual-System VLA architecture. Our core insight is twofold: we explicitly decouple the learning complexity into a coarse-to-fine hierarchy to strike an <strong>optimal training equilibrium</strong>, while simultaneously leveraging this structural modularity to implement an <strong>asynchronous execution strategy</strong>. Specifically, our architecture integrates: (1) <strong>Semantic Planner</strong>, which focuses on macro-intent, predicting discrete action tokens that guide the robot's general direction, and (2) <strong>Action Refiner</strong>, which conditions on the coarse intent to generate high-frequency continuous actions for precise pose alignment.
+            To address this, we introduce <strong>Libra-VLA</strong>, a novel Coarse-to-Fine Dual-System VLA architecture. Our core insight is twofold: we explicitly decouple the learning complexity into a coarse-to-fine hierarchy to strike a <strong>training equilibrium</strong>, while simultaneously leveraging this structural modularity to implement an <strong>asynchronous execution strategy</strong>. Specifically, our architecture integrates: (1) <strong>Semantic Planner</strong>, which focuses on macro-intent, predicting discrete action tokens that guide the robot's general direction, and (2) <strong>Action Refiner</strong>, which conditions on the coarse intent to generate high-frequency continuous actions for precise pose alignment.
         </p>
         <p>
             Crucially, our empirical analysis reveals that performance follows an <strong>inverted-U curve</strong> relative to the granularity of action decomposition. We demonstrate that Libra-VLA achieves best performance exactly when the learning difficulty is <strong>balanced</strong> between the two sub-systems. Combined with the asynchronous design, our approach offers a scalable, data-efficient, and responsive solution for open-world manipulation.
@@ -329,7 +277,7 @@
         </div>
     </div>
 
-    <div class="container" style="margin-top: 2rem;">
+    <div class="container" style="margin-top: 1.5rem;">
         <div class="method-text">
             <p>
                 We factorize the joint policy distribution into two conditional stages. The <strong>Semantic Planner</strong> (System 2) leverages a pre-trained VLM (InternVL2.5-2B) to predict coarse directional tokens via parallel decoding, trained with Cross-Entropy loss. The <strong>Action Refiner</strong> (System 1) employs a Diffusion Transformer with an independent SigLIP visual encoder, conditioned on the planner's macro-intent to synthesize precise continuous actions, trained with MSE loss.
@@ -377,7 +325,7 @@
         <div class="table-note">Best results in <strong>bold</strong>, second-best <u>underlined</u>.</div>
     </div>
 
-    <div style="margin-top: 3rem;"></div>
+    <div style="margin-top: 2.5rem;"></div>
 
     <!-- ── LIBERO-Plus Benchmark ── -->
     <h3 class="subsection-title">LIBERO-Plus Benchmark</h3>
@@ -404,106 +352,86 @@
         <div class="table-note">* denotes results reproduced for fair comparison. Best results in <strong>bold</strong>.</div>
     </div>
 
-    <div style="margin-top: 3rem;"></div>
+    <div style="margin-top: 2.5rem;"></div>
 
     <!-- ── Ablation: Libra Point ── -->
     <h3 class="subsection-title">Ablation: The "Libra Point"</h3>
-    <p class="section-note">Performance follows an inverted-U curve relative to bin granularity (<em>N</em>). The optimal equilibrium is at <strong>N=10</strong>, where coarse tokens provide sufficient guidance without overwhelming the planner.</p>
+    <p class="section-note">Performance follows an inverted-U curve relative to bin granularity (<em>N</em>). The learning equilibrium is at <strong>N=10</strong>, where coarse tokens provide sufficient guidance without overwhelming the planner.</p>
 
-    <!-- SVG Inverted-U Chart: two lines -->
-    <div style="max-width: 560px; margin: 1.5rem auto;">
-        <svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; font-family: 'Inter', sans-serif;">
-            <!-- Background -->
-            <rect x="70" y="20" width="440" height="220" fill="#fafafa" rx="4"/>
+    <!-- SVG Inverted-U Chart -->
+    <div style="max-width: 640px; margin: 1.5rem auto;">
+        <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; font-family: 'Inter', sans-serif;">
+            <rect x="80" y="20" width="500" height="240" fill="#fafafa" rx="4"/>
 
-            <!-- Y-axis grid lines & labels -->
-            <!-- range: 75% to 100%, step 5 -->
-            <line x1="70" y1="20" x2="510" y2="20" stroke="#eee" stroke-width="1"/>   <!-- 100 -->
-            <line x1="70" y1="64" x2="510" y2="64" stroke="#eee" stroke-width="1"/>   <!-- 95 -->
-            <line x1="70" y1="108" x2="510" y2="108" stroke="#eee" stroke-width="1"/> <!-- 90 -->
-            <line x1="70" y1="152" x2="510" y2="152" stroke="#eee" stroke-width="1"/> <!-- 85 -->
-            <line x1="70" y1="196" x2="510" y2="196" stroke="#eee" stroke-width="1"/> <!-- 80 -->
-            <line x1="70" y1="240" x2="510" y2="240" stroke="#e0e0e0" stroke-width="1"/> <!-- 75 -->
+            <!-- Y grid -->
+            <line x1="80" y1="20" x2="580" y2="20" stroke="#eee" stroke-width="1"/>
+            <line x1="80" y1="68" x2="580" y2="68" stroke="#eee" stroke-width="1"/>
+            <line x1="80" y1="116" x2="580" y2="116" stroke="#eee" stroke-width="1"/>
+            <line x1="80" y1="164" x2="580" y2="164" stroke="#eee" stroke-width="1"/>
+            <line x1="80" y1="212" x2="580" y2="212" stroke="#eee" stroke-width="1"/>
+            <line x1="80" y1="260" x2="580" y2="260" stroke="#e0e0e0" stroke-width="1"/>
 
-            <text x="62" y="24" text-anchor="end" font-size="10" fill="#999">100</text>
-            <text x="62" y="68" text-anchor="end" font-size="10" fill="#999">95</text>
-            <text x="62" y="112" text-anchor="end" font-size="10" fill="#999">90</text>
-            <text x="62" y="156" text-anchor="end" font-size="10" fill="#999">85</text>
-            <text x="62" y="200" text-anchor="end" font-size="10" fill="#999">80</text>
-            <text x="62" y="244" text-anchor="end" font-size="10" fill="#999">75</text>
+            <text x="72" y="24" text-anchor="end" font-size="11" fill="#999">100</text>
+            <text x="72" y="72" text-anchor="end" font-size="11" fill="#999">95</text>
+            <text x="72" y="120" text-anchor="end" font-size="11" fill="#999">90</text>
+            <text x="72" y="168" text-anchor="end" font-size="11" fill="#999">85</text>
+            <text x="72" y="216" text-anchor="end" font-size="11" fill="#999">80</text>
+            <text x="72" y="264" text-anchor="end" font-size="11" fill="#999">75</text>
 
-            <!-- Y-axis label -->
-            <text x="16" y="135" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90, 16, 135)">Avg. Success Rate (%)</text>
+            <text x="18" y="145" text-anchor="middle" font-size="12" fill="#666" transform="rotate(-90, 18, 145)">Avg. Success Rate (%)</text>
 
-            <!-- X-axis labels: N=2, N=10, N=50, N=100 at equal spacing -->
-            <!-- x positions: 110, 257, 363, 470 → evenly at 110, 256, 403, 470 -->
-            <text x="110" y="262" text-anchor="middle" font-size="11" fill="#666">N=2</text>
-            <text x="256" y="262" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="700">N=10</text>
-            <text x="403" y="262" text-anchor="middle" font-size="11" fill="#666">N=50</text>
-            <text x="470" y="262" text-anchor="middle" font-size="11" fill="#666">N=100</text>
+            <!-- X labels -->
+            <text x="130" y="282" text-anchor="middle" font-size="12" fill="#666">N=2</text>
+            <text x="290" y="282" text-anchor="middle" font-size="12" fill="#5b21b6" font-weight="700">N=10</text>
+            <text x="450" y="282" text-anchor="middle" font-size="12" fill="#666">N=50</text>
+            <text x="530" y="282" text-anchor="middle" font-size="12" fill="#666">N=100</text>
 
-            <!-- X-axis label -->
-            <text x="290" y="290" text-anchor="middle" font-size="11" fill="#666">Bin Granularity (N)</text>
+            <text x="330" y="308" text-anchor="middle" font-size="12" fill="#666">Bin Granularity (N)</text>
 
-            <!-- "Libra Point" annotation -->
-            <line x1="256" y1="20" x2="256" y2="240" stroke="#5b21b6" stroke-width="1" stroke-dasharray="4,3" opacity="0.3"/>
-            <text x="256" y="14" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="600">Libra Point</text>
+            <!-- Libra Point line -->
+            <line x1="290" y1="20" x2="290" y2="260" stroke="#5b21b6" stroke-width="1" stroke-dasharray="5,4" opacity="0.3"/>
+            <text x="290" y="14" text-anchor="middle" font-size="10" fill="#5b21b6" font-weight="600">Libra Point</text>
 
             <!--
-                Coordinate mapping: y = 240 - (val - 75) * (220/25)  i.e. 75→240, 100→20
-                Refinement (no VE): 92.3, 95.1, 87.5, 83.9
-                  N=2:   y = 240 - (92.3-75)*8.8 = 240 - 152.24 = 87.76
-                  N=10:  y = 240 - (95.1-75)*8.8 = 240 - 176.88 = 63.12
-                  N=50:  y = 240 - (87.5-75)*8.8 = 240 - 110.0  = 130.0
-                  N=100: y = 240 - (83.9-75)*8.8 = 240 - 78.32  = 161.68
-
-                Full model: 79.0, 97.2, 94.9, 93.9
-                  N=2:   y = 240 - (79.0-75)*8.8 = 240 - 35.2  = 204.8
-                  N=10:  y = 240 - (97.2-75)*8.8 = 240 - 195.36 = 44.64
-                  N=50:  y = 240 - (94.9-75)*8.8 = 240 - 175.12 = 64.88
-                  N=100: y = 240 - (93.9-75)*8.8 = 240 - 166.32 = 73.68
+                y = 260 - (val - 75) * (240/25) = 260 - (val-75)*9.6
+                Refinement: 92.3→94.0, 95.1→67.0, 87.5→140.0, 83.9→174.6
+                Full:       79.0→221.6, 97.2→47.1, 94.9→69.0, 93.9→78.6
             -->
 
-            <!-- Line: Libra-Refinement (dashed, blue-gray) -->
-            <polyline
-                points="110,87.8 256,63.1 403,130.0 470,161.7"
+            <!-- Refinement line (dashed gray) -->
+            <polyline points="130,94.0 290,67.0 450,140.0 530,174.6"
                 fill="none" stroke="#6b7280" stroke-width="2.5" stroke-dasharray="8,4"
                 stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- Dots -->
-            <circle cx="110" cy="87.8" r="4.5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
-            <circle cx="256" cy="63.1" r="4.5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
-            <circle cx="403" cy="130.0" r="4.5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
-            <circle cx="470" cy="161.7" r="4.5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
-            <!-- Labels -->
-            <text x="110" y="80" text-anchor="middle" font-size="9.5" fill="#6b7280" font-weight="600">92.3</text>
-            <text x="256" y="55" text-anchor="middle" font-size="9.5" fill="#6b7280" font-weight="600">95.1</text>
-            <text x="403" y="123" text-anchor="middle" font-size="9.5" fill="#6b7280" font-weight="600">87.5</text>
-            <text x="470" y="155" text-anchor="middle" font-size="9.5" fill="#6b7280" font-weight="600">83.9</text>
+            <circle cx="130" cy="94.0" r="5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+            <circle cx="290" cy="67.0" r="5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+            <circle cx="450" cy="140.0" r="5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+            <circle cx="530" cy="174.6" r="5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
+            <text x="130" y="85" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">92.3</text>
+            <text x="290" y="58" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">95.1</text>
+            <text x="450" y="132" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">87.5</text>
+            <text x="530" y="167" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">83.9</text>
 
-            <!-- Line: Full Model (solid, purple) -->
-            <polyline
-                points="110,204.8 256,44.6 403,64.9 470,73.7"
+            <!-- Full model line (solid purple) -->
+            <polyline points="130,221.6 290,47.1 450,69.0 530,78.6"
                 fill="none" stroke="#7c3aed" stroke-width="2.5"
                 stroke-linecap="round" stroke-linejoin="round"/>
-            <!-- Dots -->
-            <circle cx="110" cy="204.8" r="5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
-            <circle cx="256" cy="44.6" r="6" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
-            <circle cx="403" cy="64.9" r="5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
-            <circle cx="470" cy="73.7" r="5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
-            <!-- Labels -->
-            <text x="110" y="220" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-weight="700">79.0</text>
-            <text x="268" y="38" text-anchor="start" font-size="9.5" fill="#7c3aed" font-weight="700">97.2</text>
-            <text x="403" y="57" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-weight="700">94.9</text>
-            <text x="470" y="67" text-anchor="middle" font-size="9.5" fill="#7c3aed" font-weight="700">93.9</text>
+            <circle cx="130" cy="221.6" r="5.5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
+            <circle cx="290" cy="47.1" r="6.5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
+            <circle cx="450" cy="69.0" r="5.5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
+            <circle cx="530" cy="78.6" r="5.5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
+            <text x="130" y="238" text-anchor="middle" font-size="10.5" fill="#7c3aed" font-weight="700">79.0</text>
+            <text x="305" y="40" text-anchor="start" font-size="10.5" fill="#7c3aed" font-weight="700">97.2</text>
+            <text x="450" y="60" text-anchor="middle" font-size="10.5" fill="#7c3aed" font-weight="700">94.9</text>
+            <text x="530" y="71" text-anchor="middle" font-size="10.5" fill="#7c3aed" font-weight="700">93.9</text>
 
             <!-- Legend -->
-            <line x1="310" y1="280" x2="335" y2="280" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="322" cy="280" r="3" fill="#7c3aed"/>
-            <text x="340" y="283" font-size="10" fill="#555">Libra-VLA (Full)</text>
+            <line x1="350" y1="300" x2="378" y2="300" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="364" cy="300" r="3.5" fill="#7c3aed"/>
+            <text x="384" y="304" font-size="11" fill="#555">Libra-VLA (Full)</text>
 
-            <line x1="120" y1="280" x2="145" y2="280" stroke="#6b7280" stroke-width="2.5" stroke-dasharray="8,4" stroke-linecap="round"/>
-            <circle cx="132" cy="280" r="3" fill="#fff" stroke="#6b7280" stroke-width="1.5"/>
-            <text x="150" y="283" font-size="10" fill="#555">Libra-Refinement</text>
+            <line x1="140" y1="300" x2="168" y2="300" stroke="#6b7280" stroke-width="2.5" stroke-dasharray="8,4" stroke-linecap="round"/>
+            <circle cx="154" cy="300" r="3.5" fill="#fff" stroke="#6b7280" stroke-width="1.5"/>
+            <text x="174" y="304" font-size="11" fill="#555">Libra-Refinement</text>
         </svg>
     </div>
 
@@ -527,7 +455,7 @@
         </div>
     </div>
 
-    <div style="margin-top: 3rem;"></div>
+    <div style="margin-top: 2.5rem;"></div>
 
     <!-- ── Ablation: Architectural Components ── -->
     <h3 class="subsection-title">Ablation: Architectural Components</h3>
@@ -549,7 +477,7 @@
         </div>
     </div>
 
-    <div style="margin-top: 3rem;"></div>
+    <div style="margin-top: 2.5rem;"></div>
 
     <!-- ── Ablation: Asynchronous Execution ── -->
     <h3 class="subsection-title">Ablation: Asynchronous Execution</h3>
@@ -580,46 +508,30 @@
     <h2 class="section-title">Real-World Experiments</h2>
     <p class="section-note" style="margin-top: -0.5rem;">Evaluated on AgiBot G1 robot platform across three long-horizon tasks.</p>
 
-    <div class="grid-2">
-        <div class="figure" style="margin: 0;">
-            <img src="./figs/realtask.png" alt="Real-World Tasks">
-            <div class="figure-caption">Real-world tasks: Wipe Stain, Pour Water, Make Sandwich</div>
-        </div>
-        <div class="figure" style="margin: 0;">
-            <img src="./figs/realexp_v2.png" alt="Real-World Results">
-            <div class="figure-caption">Success rates compared with baselines (&pi;<sub>0</sub> and GO-1)</div>
-        </div>
+    <div class="figure" style="margin-bottom: 1rem;">
+        <img src="./figs/realtask.png" alt="Real-World Tasks">
+        <div class="figure-caption">Real-world tasks: Wipe Stain, Pour Water, Make Sandwich</div>
+    </div>
+    <div class="figure">
+        <img src="./figs/realexp_v2.png" alt="Real-World Results" style="max-width: 600px; margin: 0 auto;">
+        <div class="figure-caption">Success rates compared with baselines (&pi;<sub>0</sub> and GO-1)</div>
     </div>
 </div>
 
 <div class="container"><hr class="divider"></div>
 
-<!-- ═══════════════════ BIBTEX ═══════════════════ -->
+<!-- ═══════════════════ CITATION ═══════════════════ -->
 <div class="container">
-    <h2 class="section-title">BibTeX</h2>
-    <div class="bibtex-box" id="bibtex-content">
-        <button class="copy-btn" onclick="copyBibtex()">Copy</button>@inproceedings{libravla2026,
-  title={Libra-VLA: Achieving Learning Equilibrium via Asynchronous Coarse-to-Fine Dual-System},
-  author={Anonymous},
-  booktitle={Proceedings of ACL 2026},
-  year={2026}
-}</div>
+    <h2 class="section-title">Citation</h2>
+    <div class="citation-placeholder">
+        <strong>Paper and citation will be available upon publication.</strong><br>
+        This work has been submitted to ACL 2026 and is currently under review.
+    </div>
 </div>
 
 <footer>
     Libra-VLA Project Page &middot; 2026
 </footer>
-
-<script>
-function copyBibtex() {
-    const text = document.getElementById('bibtex-content').innerText.replace('Copy', '').trim();
-    navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector('.copy-btn');
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-    });
-}
-</script>
 
 </body>
 </html>
