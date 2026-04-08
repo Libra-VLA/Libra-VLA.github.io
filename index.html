@@ -401,15 +401,15 @@
                 <span style="font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;color:#16a34a;background:#f0fdf4;padding:6px 20px;border-radius:999px;border:1px solid #bbf7d0;display:inline-block;">&#9878; Learning Equilibrium</span>
             </div>
 
-            <!-- System Labels (above SVG) -->
+            <!-- System Labels (above SVG) — SWAPPED: Left=Refiner, Right=Planner -->
             <div style="display: flex; justify-content: space-between; padding: 0 8%; margin-bottom: 4px;">
-                <div style="text-align: center;">
-                    <div style="font-family:'Inter',sans-serif; font-size: 1rem; font-weight: 800; color: #2563eb;">Semantic Planner</div>
-                    <div style="font-family:'Inter',sans-serif; font-size: 0.72rem; font-weight: 500; color: #93c5fd;">System 2 &middot; Slow &middot; Discrete</div>
-                </div>
                 <div style="text-align: center;">
                     <div style="font-family:'Inter',sans-serif; font-size: 1rem; font-weight: 800; color: #7c3aed;">Action Refiner</div>
                     <div style="font-family:'Inter',sans-serif; font-size: 0.72rem; font-weight: 500; color: #c4b5fd;">System 1 &middot; Fast &middot; Continuous</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-family:'Inter',sans-serif; font-size: 1rem; font-weight: 800; color: #2563eb;">Semantic Planner</div>
+                    <div style="font-family:'Inter',sans-serif; font-size: 0.72rem; font-weight: 500; color: #93c5fd;">System 2 &middot; Slow &middot; Discrete</div>
                 </div>
             </div>
 
@@ -422,18 +422,18 @@
                         <stop offset="100%" stop-color="#5b21b6"/>
                     </linearGradient>
                     <linearGradient id="beam-grad" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stop-color="#60a5fa"/>
+                        <stop offset="0%" stop-color="#8b5cf6"/>
                         <stop offset="40%" stop-color="#a78bfa"/>
                         <stop offset="60%" stop-color="#a78bfa"/>
-                        <stop offset="100%" stop-color="#8b5cf6"/>
+                        <stop offset="100%" stop-color="#60a5fa"/>
                     </linearGradient>
                     <linearGradient id="lw-grad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#93c5fd"/>
-                        <stop offset="100%" stop-color="#3b82f6"/>
-                    </linearGradient>
-                    <linearGradient id="rw-grad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stop-color="#c4b5fd"/>
                         <stop offset="100%" stop-color="#7c3aed"/>
+                    </linearGradient>
+                    <linearGradient id="rw-grad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#93c5fd"/>
+                        <stop offset="100%" stop-color="#3b82f6"/>
                     </linearGradient>
                     <linearGradient id="base-grad" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stop-color="#e9d5ff"/>
@@ -473,72 +473,71 @@
                 <g id="beam-group" style="transform-origin: 350px 163px; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
                     <!-- Beam bar with rounded ends -->
                     <rect x="70" y="158" width="560" height="10" rx="5" fill="url(#beam-grad)" filter="url(#ds)"/>
-                    <!-- Beam end caps (left) -->
-                    <circle cx="75" cy="163" r="8" fill="#60a5fa" filter="url(#ds-sm)"/>
-                    <circle cx="75" cy="163" r="4" fill="#93c5fd"/>
-                    <!-- Beam end caps (right) -->
-                    <circle cx="625" cy="163" r="8" fill="#8b5cf6" filter="url(#ds-sm)"/>
-                    <circle cx="625" cy="163" r="4" fill="#c4b5fd"/>
+                    <!-- Beam end caps (left = Refiner purple) -->
+                    <circle cx="75" cy="163" r="8" fill="#8b5cf6" filter="url(#ds-sm)"/>
+                    <circle cx="75" cy="163" r="4" fill="#c4b5fd"/>
+                    <!-- Beam end caps (right = Planner blue) -->
+                    <circle cx="625" cy="163" r="8" fill="#60a5fa" filter="url(#ds-sm)"/>
+                    <circle cx="625" cy="163" r="4" fill="#93c5fd"/>
 
-                    <!-- ── Left: chains + pan ── -->
-                    <!-- Chain links (3 per side) -->
-                    <line x1="105" y1="168" x2="105" y2="200" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
-                    <circle cx="105" cy="175" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
-                    <circle cx="105" cy="183" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
-                    <circle cx="105" cy="191" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
+                    <!-- ── Left: Action Refiner (purple) chains + pan ── -->
+                    <line x1="105" y1="168" x2="105" y2="200" stroke="#8b5cf6" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="105" cy="175" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+                    <circle cx="105" cy="183" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+                    <circle cx="105" cy="191" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
 
-                    <line x1="155" y1="168" x2="155" y2="200" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
-                    <circle cx="155" cy="175" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
-                    <circle cx="155" cy="183" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
-                    <circle cx="155" cy="191" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
+                    <line x1="155" y1="168" x2="155" y2="200" stroke="#8b5cf6" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="155" cy="175" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+                    <circle cx="155" cy="183" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+                    <circle cx="155" cy="191" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
 
-                    <!-- Pan (dish shape) -->
-                    <path d="M85,200 Q85,195 95,195 L165,195 Q175,195 175,200 L170,210 Q165,218 130,218 Q95,218 90,210 Z" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5" filter="url(#ds-sm)"/>
-                    <!-- Pan rim highlight -->
-                    <path d="M95,197 L165,197" stroke="#bfdbfe" stroke-width="1" opacity="0.8"/>
+                    <path d="M85,200 Q85,195 95,195 L165,195 Q175,195 175,200 L170,210 Q165,218 130,218 Q95,218 90,210 Z" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5" filter="url(#ds-sm)"/>
+                    <path d="M95,197 L165,197" stroke="#ddd6fe" stroke-width="1" opacity="0.8"/>
 
                     <!-- Weight block (left) -->
                     <rect id="left-weight" x="108" y="180" width="44" height="35" rx="5" fill="url(#lw-grad)" filter="url(#ds)" opacity="0.9" style="transition: height 0.6s ease, y 0.6s ease;"/>
-                    <!-- Weight block shine -->
-                    <rect x="112" y="183" width="6" height="20" rx="3" fill="#bfdbfe" opacity="0.4" style="transition: height 0.6s ease, y 0.6s ease;" class="left-shine"/>
+                    <!-- Weight block shine (left=purple) -->
+                    <rect x="112" y="183" width="6" height="20" rx="3" fill="#ddd6fe" opacity="0.4" style="transition: height 0.6s ease, y 0.6s ease;" class="left-shine"/>
 
-                    <!-- ── Right: chains + pan ── -->
-                    <line x1="545" y1="168" x2="545" y2="200" stroke="#8b5cf6" stroke-width="1.5" opacity="0.6"/>
-                    <circle cx="545" cy="175" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
-                    <circle cx="545" cy="183" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
-                    <circle cx="545" cy="191" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+                    <!-- ── Right: Semantic Planner (blue) chains + pan ── -->
+                    <line x1="545" y1="168" x2="545" y2="200" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="545" cy="175" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
+                    <circle cx="545" cy="183" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
+                    <circle cx="545" cy="191" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
 
-                    <line x1="595" y1="168" x2="595" y2="200" stroke="#8b5cf6" stroke-width="1.5" opacity="0.6"/>
-                    <circle cx="595" cy="175" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
-                    <circle cx="595" cy="183" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
-                    <circle cx="595" cy="191" r="2" fill="none" stroke="#8b5cf6" stroke-width="1" opacity="0.5"/>
+                    <line x1="595" y1="168" x2="595" y2="200" stroke="#60a5fa" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="595" cy="175" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
+                    <circle cx="595" cy="183" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
+                    <circle cx="595" cy="191" r="2" fill="none" stroke="#60a5fa" stroke-width="1" opacity="0.5"/>
 
-                    <path d="M525,200 Q525,195 535,195 L605,195 Q615,195 615,200 L610,210 Q605,218 570,218 Q535,218 530,210 Z" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.5" filter="url(#ds-sm)"/>
-                    <path d="M535,197 L605,197" stroke="#ddd6fe" stroke-width="1" opacity="0.8"/>
+                    <path d="M525,200 Q525,195 535,195 L605,195 Q615,195 615,200 L610,210 Q605,218 570,218 Q535,218 530,210 Z" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5" filter="url(#ds-sm)"/>
+                    <path d="M535,197 L605,197" stroke="#bfdbfe" stroke-width="1" opacity="0.8"/>
 
                     <!-- Weight block (right) -->
                     <rect id="right-weight" x="548" y="180" width="44" height="35" rx="5" fill="url(#rw-grad)" filter="url(#ds)" opacity="0.9" style="transition: height 0.6s ease, y 0.6s ease;"/>
-                    <rect x="552" y="183" width="6" height="20" rx="3" fill="#ddd6fe" opacity="0.4" style="transition: height 0.6s ease, y 0.6s ease;" class="right-shine"/>
+                    <!-- Weight block shine (right=blue) -->
+                    <rect x="552" y="183" width="6" height="20" rx="3" fill="#bfdbfe" opacity="0.4" style="transition: height 0.6s ease, y 0.6s ease;" class="right-shine"/>
                 </g>
 
                 <!-- Degeneration arrows (outside beam) -->
                 <g id="left-degen" opacity="0" style="transition: opacity 0.5s;">
-                    <text x="42" y="302" text-anchor="start" font-size="10.5" fill="#dc2626" font-weight="700">&larr; Degenerate to Autoregression</text>
+                    <text x="42" y="302" text-anchor="start" font-size="10.5" fill="#dc2626" font-weight="700">&larr; Degenerate to Diffusion</text>
                 </g>
                 <g id="right-degen" opacity="0" style="transition: opacity 0.5s;">
-                    <text x="658" y="302" text-anchor="end" font-size="10.5" fill="#dc2626" font-weight="700">Degenerate to Diffusion &rarr;</text>
+                    <text x="658" y="302" text-anchor="end" font-size="10.5" fill="#dc2626" font-weight="700">Degenerate to Autoregression &rarr;</text>
                 </g>
             </svg>
 
             <!-- Slider area -->
             <div style="padding: 0 32px; margin-top: 4px;">
                 <div style="text-align: center; margin-bottom: 6px;">
-                    <span style="font-family:'Inter',sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em;">Coarse Action Bins</span>
+                    <div style="font-family:'Inter',sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); letter-spacing: 0.02em;">Coarse Action Bin Number</div>
+                    <div style="font-family:'Inter',sans-serif; font-size: 0.68rem; font-weight: 500; color: var(--text-light); margin-top: 1px;">Intent Granularity</div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <span style="font-family:'Inter',sans-serif; font-size: 0.72rem; color: #60a5fa; font-weight: 700; white-space: nowrap;">Few bins</span>
-                    <input type="range" id="n-slider" min="0" max="100" value="50" step="1" style="flex: 1; height: 6px; border-radius: 3px; background: linear-gradient(to right, #93c5fd, #7c3aed 50%, #c4b5fd);">
-                    <span style="font-family:'Inter',sans-serif; font-size: 0.72rem; color: #8b5cf6; font-weight: 700; white-space: nowrap;">Many bins</span>
+                    <span style="font-family:'Inter',sans-serif; font-size: 0.72rem; color: #8b5cf6; font-weight: 700; white-space: nowrap;">Coarse</span>
+                    <input type="range" id="n-slider" min="0" max="100" value="50" step="1" style="flex: 1; height: 6px; border-radius: 3px; background: linear-gradient(to right, #c4b5fd, #7c3aed 50%, #93c5fd);">
+                    <span style="font-family:'Inter',sans-serif; font-size: 0.72rem; color: #60a5fa; font-weight: 700; white-space: nowrap;">Fine</span>
                 </div>
                 <div style="display: flex; justify-content: center; margin-top: 4px;">
                     <span style="font-family:'Inter',sans-serif; font-size: 0.62rem; color: var(--accent); font-weight: 600;">&#9650; Libra Point</span>
@@ -566,18 +565,21 @@
         function update() {
             const v = parseInt(slider.value);
             const offset = v - 50;
+            // offset>0 → more bins → Planner (RIGHT) burden → tilt right (positive rotation)
 
             const tilt = offset * 0.16;
             beamGroup.style.transform = 'rotate(' + tilt + 'deg)';
 
             const baseH = 35;
-            const plannerH = Math.max(6, baseH + offset * 0.7);
+            // Left = Refiner: heavy when few bins (offset<0)
             const refinerH = Math.max(6, baseH - offset * 0.7);
+            // Right = Planner: heavy when many bins (offset>0)
+            const plannerH = Math.max(6, baseH + offset * 0.7);
 
-            leftWeight.setAttribute('height', plannerH);
-            leftWeight.setAttribute('y', 195 - plannerH);
-            rightWeight.setAttribute('height', refinerH);
-            rightWeight.setAttribute('y', 195 - refinerH);
+            leftWeight.setAttribute('height', refinerH);
+            leftWeight.setAttribute('y', 195 - refinerH);
+            rightWeight.setAttribute('height', plannerH);
+            rightWeight.setAttribute('y', 195 - plannerH);
 
             const abs = Math.abs(offset);
             if (abs <= 10) {
@@ -588,32 +590,32 @@
                 explainBox.style.borderColor = '#bbf7d0';
             } else if (offset > 10 && offset <= 32) {
                 statusLabel.innerHTML = '<span style="font-family:Inter,sans-serif;font-size:0.88rem;font-weight:700;color:#d97706;background:#fffbeb;padding:6px 20px;border-radius:999px;border:1px solid #fde68a;display:inline-block;">&#9888; Increasing Planner Burden</span>';
-                leftDegen.style.opacity = '0.4';
-                rightDegen.style.opacity = '0';
+                leftDegen.style.opacity = '0';
+                rightDegen.style.opacity = '0.4';
                 explainBox.innerHTML = 'Finer discretization shifts complexity toward the Semantic Planner. It must predict increasingly precise metric values rather than abstract directional intents, <strong>approaching the difficulty of continuous regression</strong>. The Action Refiner becomes underutilized.';
                 explainBox.style.borderColor = '#fde68a';
             } else if (offset > 32) {
                 statusLabel.innerHTML = '<span style="font-family:Inter,sans-serif;font-size:0.88rem;font-weight:700;color:#dc2626;background:#fef2f2;padding:6px 20px;border-radius:999px;border:1px solid #fecaca;display:inline-block;">&#9888; Degenerate to Autoregression</span>';
-                leftDegen.style.opacity = '1';
-                rightDegen.style.opacity = '0';
+                leftDegen.style.opacity = '0';
+                rightDegen.style.opacity = '1';
                 explainBox.innerHTML = 'Excessive bins overwhelm the Semantic Planner with precise metric prediction. Degraded coarse prediction accuracy feeds <strong>erroneous directional guidance</strong> to the Action Refiner, triggering cascading errors. The system collapses into a high-precision discrete autoregressive paradigm.';
                 explainBox.style.borderColor = '#fecaca';
             } else if (offset < -10 && offset >= -32) {
                 statusLabel.innerHTML = '<span style="font-family:Inter,sans-serif;font-size:0.88rem;font-weight:700;color:#d97706;background:#fffbeb;padding:6px 20px;border-radius:999px;border:1px solid #fde68a;display:inline-block;">&#9888; Increasing Refiner Burden</span>';
-                leftDegen.style.opacity = '0';
-                rightDegen.style.opacity = '0.4';
+                leftDegen.style.opacity = '0.4';
+                rightDegen.style.opacity = '0';
                 explainBox.innerHTML = 'Too few bins reduce the information density of coarse tokens. The Semantic Planner provides <strong>insufficient directional guidance</strong>, leaving the Action Refiner to compensate for the missing structural information and shoulder a disproportionate share of the learning difficulty.';
                 explainBox.style.borderColor = '#fde68a';
             } else {
                 statusLabel.innerHTML = '<span style="font-family:Inter,sans-serif;font-size:0.88rem;font-weight:700;color:#dc2626;background:#fef2f2;padding:6px 20px;border-radius:999px;border:1px solid #fecaca;display:inline-block;">&#9888; Degenerate to Diffusion</span>';
-                leftDegen.style.opacity = '0';
-                rightDegen.style.opacity = '1';
+                leftDegen.style.opacity = '1';
+                rightDegen.style.opacity = '0';
                 explainBox.innerHTML = 'Coarse tokens carry almost no directional information. The Semantic Planner fails to provide a meaningful geometric anchor, forcing the <strong>Action Refiner to shoulder the entire burden</strong> of trajectory synthesis. The system collapses into a pure diffusion paradigm without hierarchical decomposition.';
                 explainBox.style.borderColor = '#fecaca';
             }
 
             const pct = v;
-            slider.style.background = 'linear-gradient(to right, #93c5fd 0%, #7c3aed ' + pct + '%, #e5e7eb ' + pct + '%, #e5e7eb 100%)';
+            slider.style.background = 'linear-gradient(to right, #c4b5fd 0%, #7c3aed ' + pct + '%, #e5e7eb ' + pct + '%, #e5e7eb 100%)';
         }
 
         slider.addEventListener('input', update);
