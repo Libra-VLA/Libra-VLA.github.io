@@ -402,14 +402,14 @@
             </div>
 
             <!-- System Labels (above SVG) — SWAPPED: Left=Refiner, Right=Planner -->
-            <div style="display: flex; justify-content: space-between; padding: 0 8%; margin-bottom: 4px;">
+            <div style="display: flex; justify-content: space-between; padding: 0 8%; margin-bottom: -8px;">
                 <div style="text-align: center;">
                     <div style="font-family:'Inter',sans-serif; font-size: 1rem; font-weight: 800; color: #7c3aed;">Action Refiner</div>
-                    <div style="font-family:'Inter',sans-serif; font-size: 0.72rem; font-weight: 500; color: #c4b5fd;">System 1 &middot; Fast &middot; Continuous</div>
+                    <div style="font-family:'Inter',sans-serif; font-size: 0.75rem; font-weight: 500; color: #c4b5fd;">System 1 &middot; Fast &middot; Continuous</div>
                 </div>
                 <div style="text-align: center;">
                     <div style="font-family:'Inter',sans-serif; font-size: 1rem; font-weight: 800; color: #2563eb;">Semantic Planner</div>
-                    <div style="font-family:'Inter',sans-serif; font-size: 0.72rem; font-weight: 500; color: #93c5fd;">System 2 &middot; Slow &middot; Discrete</div>
+                    <div style="font-family:'Inter',sans-serif; font-size: 0.75rem; font-weight: 500; color: #93c5fd;">System 2 &middot; Slow &middot; Discrete</div>
                 </div>
             </div>
 
@@ -672,7 +672,7 @@
             <circle cx="450" cy="140.0" r="5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
             <circle cx="530" cy="174.6" r="5" fill="#fff" stroke="#6b7280" stroke-width="2"/>
             <text x="130" y="85" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">92.3</text>
-            <text x="290" y="58" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">95.1</text>
+            <text x="310" y="74" text-anchor="start" font-size="10.5" fill="#6b7280" font-weight="600">95.1</text>
             <text x="450" y="132" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">87.5</text>
             <text x="530" y="167" text-anchor="middle" font-size="10.5" fill="#6b7280" font-weight="600">83.9</text>
 
@@ -685,7 +685,7 @@
             <circle cx="450" cy="69.0" r="5.5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
             <circle cx="530" cy="78.6" r="5.5" fill="#7c3aed" stroke="#fff" stroke-width="2"/>
             <text x="130" y="238" text-anchor="middle" font-size="10.5" fill="#7c3aed" font-weight="700">79.0</text>
-            <text x="305" y="40" text-anchor="start" font-size="10.5" fill="#7c3aed" font-weight="700">97.2</text>
+            <text x="265" y="42" text-anchor="start" font-size="10.5" fill="#7c3aed" font-weight="700">97.2</text>
             <text x="450" y="60" text-anchor="middle" font-size="10.5" fill="#7c3aed" font-weight="700">94.9</text>
             <text x="530" y="71" text-anchor="middle" font-size="10.5" fill="#7c3aed" font-weight="700">93.9</text>
 
@@ -779,88 +779,66 @@
     </div>
 
     <!-- SVG Grouped Bar Chart -->
-    <div style="max-width: 640px; margin: 2rem auto 1rem;">
-        <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; font-family: 'Inter', sans-serif;">
-            <!-- Background -->
-            <rect x="60" y="10" width="560" height="230" fill="#fafafa" rx="4"/>
+    <div style="max-width: 680px; margin: 2rem auto 1rem;">
+        <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; font-family: 'Inter', sans-serif;">
+            <rect x="60" y="10" width="600" height="230" fill="#fafafa" rx="4"/>
 
-            <!-- Y grid lines: 0 to 100, step 20 -->
-            <line x1="60" y1="240" x2="620" y2="240" stroke="#e0e0e0" stroke-width="1"/>  <!-- 0 -->
-            <line x1="60" y1="194" x2="620" y2="194" stroke="#eee" stroke-width="1"/>     <!-- 20 -->
-            <line x1="60" y1="148" x2="620" y2="148" stroke="#eee" stroke-width="1"/>     <!-- 40 -->
-            <line x1="60" y1="102" x2="620" y2="102" stroke="#eee" stroke-width="1"/>     <!-- 60 -->
-            <line x1="60" y1="56" x2="620" y2="56" stroke="#eee" stroke-width="1"/>      <!-- 80 -->
-            <line x1="60" y1="10" x2="620" y2="10" stroke="#eee" stroke-width="1"/>      <!-- 100 -->
+            <line x1="60" y1="240" x2="660" y2="240" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="60" y1="194" x2="660" y2="194" stroke="#eee" stroke-width="1"/>
+            <line x1="60" y1="148" x2="660" y2="148" stroke="#eee" stroke-width="1"/>
+            <line x1="60" y1="102" x2="660" y2="102" stroke="#eee" stroke-width="1"/>
+            <line x1="60" y1="56" x2="660" y2="56" stroke="#eee" stroke-width="1"/>
+            <line x1="60" y1="10" x2="660" y2="10" stroke="#eee" stroke-width="1"/>
 
-            <!-- Y labels -->
             <text x="52" y="244" text-anchor="end" font-size="10" fill="#999">0</text>
             <text x="52" y="198" text-anchor="end" font-size="10" fill="#999">20</text>
             <text x="52" y="152" text-anchor="end" font-size="10" fill="#999">40</text>
             <text x="52" y="106" text-anchor="end" font-size="10" fill="#999">60</text>
             <text x="52" y="60" text-anchor="end" font-size="10" fill="#999">80</text>
             <text x="52" y="14" text-anchor="end" font-size="10" fill="#999">100</text>
-
             <text x="14" y="130" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90, 14, 130)">Success Rate (%)</text>
 
             <!--
-                Bar height = val * 230/100 = val * 2.3
-                Bar y = 240 - height
-                Groups at x centers: 155, 295, 435, 555
-                Bar width: 32, gap between bars: 6
-                GO-1 x offset: -37, pi0: -3, Ours: +31
+                4 groups, centers: 135, 285, 435, 585 (spacing=150)
+                3 bars per group, width=32, gap=2 → total=98
+                bar1: center-49, bar2: center-15, bar3: center+19
             -->
 
-            <!-- === Wipe Stain === -->
-            <!-- GO-1: 66.7 → h=153.4, y=86.6 -->
-            <rect x="118" y="86.6" width="32" height="153.4" rx="3" fill="#93c5fd"/>
-            <text x="134" y="80" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">66.7</text>
-            <!-- pi0: 75.0 → h=172.5, y=67.5 -->
-            <rect x="152" y="67.5" width="32" height="172.5" rx="3" fill="#fdba74"/>
-            <text x="168" y="61" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">75.0</text>
-            <!-- Ours: 75.0 → h=172.5, y=67.5 -->
-            <rect x="186" y="67.5" width="32" height="172.5" rx="3" fill="#7c3aed"/>
-            <text x="202" y="61" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">75.0</text>
-            <!-- X label -->
-            <text x="168" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="500">Wipe Stain</text>
+            <!-- === Wipe Stain (center=135) === -->
+            <rect x="86" y="86.6" width="32" height="153.4" rx="3" fill="#93c5fd"/>
+            <text x="102" y="80" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">66.7</text>
+            <rect x="120" y="67.5" width="32" height="172.5" rx="3" fill="#fdba74"/>
+            <text x="136" y="61" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">75.0</text>
+            <rect x="154" y="67.5" width="32" height="172.5" rx="3" fill="#7c3aed"/>
+            <text x="170" y="61" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">75.0</text>
+            <text x="135" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="500">Wipe Stain</text>
 
-            <!-- === Pour Water === -->
-            <!-- GO-1: 33.3 → h=76.6, y=163.4 -->
-            <rect x="258" y="163.4" width="32" height="76.6" rx="3" fill="#93c5fd"/>
-            <text x="274" y="157" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">33.3</text>
-            <!-- pi0: 50.0 → h=115, y=125 -->
-            <rect x="292" y="125" width="32" height="115" rx="3" fill="#fdba74"/>
-            <text x="308" y="119" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">50.0</text>
-            <!-- Ours: 83.3 → h=191.6, y=48.4 -->
-            <rect x="326" y="48.4" width="32" height="191.6" rx="3" fill="#7c3aed"/>
-            <text x="342" y="42" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">83.3</text>
-            <!-- X label -->
-            <text x="308" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="500">Pour Water</text>
+            <!-- === Pour Water (center=285) === -->
+            <rect x="236" y="163.4" width="32" height="76.6" rx="3" fill="#93c5fd"/>
+            <text x="252" y="157" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">33.3</text>
+            <rect x="270" y="125" width="32" height="115" rx="3" fill="#fdba74"/>
+            <text x="286" y="119" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">50.0</text>
+            <rect x="304" y="48.4" width="32" height="191.6" rx="3" fill="#7c3aed"/>
+            <text x="320" y="42" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">83.3</text>
+            <text x="285" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="500">Pour Water</text>
 
-            <!-- === Make Sandwich === -->
-            <!-- GO-1: 33.3 → h=76.6, y=163.4 -->
-            <rect x="398" y="163.4" width="32" height="76.6" rx="3" fill="#93c5fd"/>
-            <text x="414" y="157" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">33.3</text>
-            <!-- pi0: 33.3 → h=76.6, y=163.4 -->
-            <rect x="432" y="163.4" width="32" height="76.6" rx="3" fill="#fdba74"/>
-            <text x="448" y="157" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">33.3</text>
-            <!-- Ours: 50.0 → h=115, y=125 -->
-            <rect x="466" y="125" width="32" height="115" rx="3" fill="#7c3aed"/>
-            <text x="482" y="119" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">50.0</text>
-            <!-- X label -->
-            <text x="448" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="500">Make Sandwich</text>
+            <!-- === Make Sandwich (center=435) === -->
+            <rect x="386" y="163.4" width="32" height="76.6" rx="3" fill="#93c5fd"/>
+            <text x="402" y="157" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">33.3</text>
+            <rect x="420" y="163.4" width="32" height="76.6" rx="3" fill="#fdba74"/>
+            <text x="436" y="157" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">33.3</text>
+            <rect x="454" y="125" width="32" height="115" rx="3" fill="#7c3aed"/>
+            <text x="470" y="119" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">50.0</text>
+            <text x="435" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="500">Make Sandwich</text>
 
-            <!-- === Average === -->
-            <!-- GO-1: 44.4 → h=102.1, y=137.9 -->
-            <rect x="528" y="137.9" width="32" height="102.1" rx="3" fill="#93c5fd"/>
-            <text x="544" y="132" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">44.4</text>
-            <!-- pi0: 52.8 → h=121.4, y=118.6 -->
-            <rect x="562" y="118.6" width="32" height="121.4" rx="3" fill="#fdba74"/>
-            <text x="578" y="112" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">52.8</text>
-            <!-- Ours: 69.4 → h=159.6, y=80.4 -->
-            <rect x="596" y="80.4" width="32" height="159.6" rx="3" fill="#7c3aed"/>
-            <text x="612" y="74" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">69.4</text>
-            <!-- X label -->
-            <text x="578" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="600">Average</text>
+            <!-- === Average (center=585) === -->
+            <rect x="536" y="137.9" width="32" height="102.1" rx="3" fill="#93c5fd"/>
+            <text x="552" y="132" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">44.4</text>
+            <rect x="570" y="118.6" width="32" height="121.4" rx="3" fill="#fdba74"/>
+            <text x="586" y="112" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="600">52.8</text>
+            <rect x="604" y="80.4" width="32" height="159.6" rx="3" fill="#7c3aed"/>
+            <text x="620" y="74" text-anchor="middle" font-size="9" fill="#5b21b6" font-weight="700">69.4</text>
+            <text x="585" y="258" text-anchor="middle" font-size="11" fill="#555" font-weight="600">Average</text>
 
             <!-- Legend -->
             <rect x="180" y="275" width="14" height="10" rx="2" fill="#93c5fd"/>
@@ -895,8 +873,7 @@
 <div class="container">
     <h2 class="section-title">Citation</h2>
     <div class="citation-placeholder">
-        <strong>Paper and citation will be available upon publication.</strong><br>
-        This work has been submitted to ACL 2026 and is currently under review.
+        <strong>Paper and citation coming soon.</strong>
     </div>
 </div>
 
