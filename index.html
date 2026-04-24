@@ -618,13 +618,16 @@
     <h2 class="section-title">Abstract</h2>
     <div class="abstract-text">
         <p>
-            Vision-Language-Action (VLA) models have emerged as a promising paradigm for generalist robotic manipulation by grounding high-level semantic instructions into executable physical actions. However, prevailing approaches typically adopt a <em>monolithic generation paradigm</em>, attempting to map high-level visual-linguistic features directly to high-frequency motor commands in a flat, non-hierarchical fashion. This strategy overlooks the inherent hierarchy of robotic manipulation, where complex actions can be naturally modeled in a <strong>Hybrid Action Space</strong>, decomposing into <em>discrete</em> macro-directional reaching and <em>continuous</em> micro-pose alignment. Bypassing this structural hierarchy widens the semantic-actuation gap, compelling models to rely on cross-modal alignment via massive-scale robotic pre-training to bridge the gap.
+            Vision-Language-Action (VLA) models are a promising paradigm for generalist robotic manipulation by grounding high-level semantic instructions into executable physical actions. However, prevailing approaches typically adopt a <em>monolithic generation paradigm</em>, directly mapping visual-linguistic features to high-frequency motor commands in a flat, non-hierarchical fashion. This strategy overlooks the inherent hierarchy of robotic manipulation, where complex actions can be naturally modeled in a <strong>Hybrid Action Space</strong>, decomposing into <em>discrete</em> macro-directional reaching and <em>continuous</em> micro-pose alignment, severely widening the semantic-actuation gap and imposing a heavy representational burden on grounding high-level semantics to continuous actions.
         </p>
         <p>
-            To address this, we introduce <strong>Libra-VLA</strong>, a novel Coarse-to-Fine Dual-System VLA architecture. Our core insight is twofold: we explicitly decouple the learning complexity into a coarse-to-fine hierarchy to strike a <strong>training equilibrium</strong>, while simultaneously leveraging this structural modularity to implement an <strong>asynchronous execution strategy</strong>. Specifically, our architecture integrates: (1) <strong>Semantic Planner</strong>, which focuses on macro-intent, predicting discrete action tokens that guide the robot's general direction, and (2) <strong>Action Refiner</strong>, which conditions on the coarse intent to generate high-frequency continuous actions for precise pose alignment.
+            To address this, we introduce <strong>Libra-VLA</strong>, a novel Coarse-to-Fine Dual-System VLA architecture. We explicitly decouple the learning complexity into a coarse-to-fine hierarchy to strike a <strong>training equilibrium</strong>, while simultaneously leveraging this structural modularity to implement an <strong>asynchronous execution strategy</strong>.
         </p>
         <p>
-            Crucially, our empirical analysis reveals that performance follows an <strong>inverted-U curve</strong> relative to the granularity of action decomposition. We demonstrate that Libra-VLA achieves best performance exactly when the learning difficulty is <strong>balanced</strong> between the two sub-systems. Combined with the asynchronous design, our approach offers a scalable, data-efficient, and responsive solution for open-world manipulation.
+            The <strong>Semantic Planner</strong> predicts discrete action tokens capturing macro-directional intent, while the <strong>Action Refiner</strong> conditions on coarse intent to generate high-frequency continuous actions for precise alignment.
+        </p>
+        <p>
+            Crucially, our empirical analysis reveals that performance follows an <strong>inverted-U curve</strong> relative to action decomposition granularity, peaking exactly when the learning difficulty is <strong>balanced</strong> between the two sub-systems. With the asynchronous design, our approach offers a scalable, robust, and responsive solution for open-world manipulation.
         </p>
     </div>
 </div>
@@ -714,7 +717,7 @@
                     <tr><td>UniVLA</td><td>Continuous</td><td>1.8</td><td>46.2</td><td>69.6</td><td>69.0</td><td>81.0</td><td>21.2</td><td>31.9</td><td>42.9</td></tr>
                     <tr><td>&pi;<sub>0</sub>-FAST</td><td>Discrete</td><td class="second">65.1</td><td>21.6</td><td>61.0</td><td>73.2</td><td>73.2</td><td>74.4</td><td>68.8</td><td>61.6</td></tr>
                     <tr><td>OpenVLA-OFT</td><td>Continuous</td><td>56.4</td><td>31.9</td><td class="second">79.5</td><td class="second">88.7</td><td class="second">93.3</td><td class="second">75.8</td><td class="second">74.2</td><td class="second">69.6</td></tr>
-                    <tr class="ours"><td>Libra-VLA (Ours)</td><td>Hybrid</td><td>60.7</td><td class="best">47.8</td><td class="best">88.5</td><td class="best">97.3</td><td class="best">94.5</td><td class="best">94.9</td><td class="best">79.9</td><td class="best">79.1</td></tr>
+                    <tr class="ours"><td>Libra-VLA (Ours)</td><td>Hybrid</td><td class="best">68.9</td><td class="best">48.8</td><td class="best">92.7</td><td class="best">97.9</td><td class="best">93.4</td><td class="best">86.3</td><td class="best">77.5</td><td class="best">79.5</td></tr>
                     <tr><td colspan="10" style="text-align:center; font-style:italic; color:var(--text-light); border-bottom:1px solid var(--border); padding: 6px 0;">Supervised Fine-Tuning</td></tr>
                     <tr><td>&pi;<sub>0</sub>*</td><td>Continuous</td><td>79.6</td><td>21.1</td><td>72.5</td><td>84.7</td><td>86.2</td><td>68.3</td><td>69.4</td><td>67.4</td></tr>
                     <tr><td>&pi;<sub>0.5</sub>*</td><td>Continuous</td><td>70.3</td><td class="second">41.7</td><td>81.1</td><td class="best">97.3</td><td class="best">94.6</td><td>71.8</td><td class="best">84.9</td><td>75.7</td></tr>
@@ -1078,6 +1081,67 @@
                     <tr class="ours"><td>Full (Ours)</td><td>&check;</td><td>&check;</td><td class="best">98.6</td><td class="best">99.4</td><td class="best">98.0</td><td class="best">92.8</td><td class="best">97.2</td></tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div style="margin-top: 2.5rem;"></div>
+
+    <!-- ── Ablation: Training Strategy ── -->
+    <h3 class="subsection-title">Ablation: Training Strategy</h3>
+    <p class="section-note">Our <strong>dynamic curriculum</strong> strategy balances stable early-stage convergence and late-stage robustness. Pure Teacher Forcing leaves the refiner over-reliant on perfect coarse inputs, while No Teacher Forcing destabilizes early optimization with noisy planner predictions. The dynamic curriculum starts from ground-truth anchors and gradually switches to predicted ones, yielding the best performance across all suites.</p>
+
+    <div class="container">
+        <div class="table-wrap">
+            <table class="results">
+                <thead>
+                    <tr><th>Training Strategy</th><th>Spatial</th><th>Object</th><th>Goal</th><th>Long</th><th>Avg.</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Pure Teacher Forcing</td><td>96.6</td><td>99.2</td><td>95.8</td><td>92.4</td><td>96.0</td></tr>
+                    <tr><td>No Teacher Forcing</td><td>97.4</td><td>99.0</td><td>95.0</td><td>90.4</td><td>95.5</td></tr>
+                    <tr class="ours"><td>Dynamic Curriculum (Ours)</td><td class="best">98.6</td><td class="best">99.4</td><td class="best">98.0</td><td class="best">92.8</td><td class="best">97.2</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="margin-top: 2.5rem;"></div>
+
+    <!-- ── Training Convergence ── -->
+    <h3 class="subsection-title">Training Convergence</h3>
+    <p class="section-note">The coarse-to-fine <strong>workload decoupling</strong> substantially accelerates optimization. At one-third of the training budget (10k steps), Libra-VLA already surpasses the monolithic Libra-Base by <strong>16.3 points</strong>, with the largest gap on long-horizon tasks. The continuous-action MSE loss curves below confirm this advantage: Libra-VLA's fine-action loss drops to ~0.01 while Libra-Base remains at ~0.07. The short-lived bump at step 5k corresponds to the dynamic curriculum switching from ground-truth to predicted coarse anchors &mdash; the refiner quickly recovers, exhibiting error-correction behavior.</p>
+
+    <div class="container">
+        <div class="table-wrap">
+            <table class="results">
+                <thead>
+                    <tr><th>Method</th><th>Spatial</th><th>Object</th><th>Goal</th><th>Long</th><th>Avg.</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Libra-Base</td><td>81.0</td><td>86.8</td><td>66.0</td><td>54.4</td><td>72.1</td></tr>
+                    <tr class="ours"><td>Libra-VLA (Ours)</td><td class="best">97.2</td><td class="best">99.2</td><td class="best">75.0</td><td class="best">82.2</td><td class="best">88.4</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-note">Intermediate success rates (%) at 10,000 training steps on LIBERO, averaged over 500 rollouts per suite.</div>
+    </div>
+
+    <div style="margin-top: 1.5rem;"></div>
+
+    <div class="container-wide">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+            <div class="figure" style="flex: 1 1 300px; min-width: 280px; max-width: 520px;">
+                <img src="./figs/loss_curve.jpeg" alt="Training loss (linear scale)" style="width: 100%; height: auto;">
+                <div class="figure-caption">
+                    <strong>(a) Linear scale.</strong> Continuous-action MSE loss on LIBERO. Libra-VLA converges markedly faster than the monolithic baseline.
+                </div>
+            </div>
+            <div class="figure" style="flex: 1 1 300px; min-width: 280px; max-width: 520px;">
+                <img src="./figs/log_loss_curve.jpeg" alt="Training loss (log scale)" style="width: 100%; height: auto;">
+                <div class="figure-caption">
+                    <strong>(b) Log scale.</strong> Reveals the low-loss regime where the linear view saturates, and the transient rise at step 5k caused by the dynamic curriculum switch.
+                </div>
+            </div>
         </div>
     </div>
 
