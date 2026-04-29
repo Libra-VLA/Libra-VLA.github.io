@@ -201,6 +201,21 @@
         }
         .citation-placeholder strong { color: var(--text-secondary); font-weight: 700; }
 
+        /* Citation BibTeX block */
+        .citation-bibtex {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.1rem 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+            font-size: 0.82rem;
+            line-height: 1.55;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -266,12 +281,12 @@
     </div>
     <div class="btn-row">
         <a class="btn" href="#">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Paper (coming soon)
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Code (coming soon)
         </a>
-        <a class="btn" href="#">
+        <a class="btn" href="https://arxiv.org/abs/2604.24921" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-            arXiv (coming soon)
+            arXiv
         </a>
     </div>
 </div>
@@ -1278,9 +1293,15 @@
 <!-- ═══════════════════ CITATION ═══════════════════ -->
 <div class="container">
     <h2 class="section-title">Citation</h2>
-    <div class="citation-placeholder">
-        <strong>Coming soon.</strong>
-    </div>
+    <pre class="citation-bibtex">@misc{wei2026libravlaachievinglearningequilibrium,
+      title={Libra-VLA: Achieving Learning Equilibrium via Asynchronous Coarse-to-Fine Dual-System},
+      author={Yifei Wei and Linqing Zhong and Yi Liu and Yuxiang Lu and Xindong He and Maoqing Yao and Guanghui Ren},
+      year={2026},
+      eprint={2604.24921},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2604.24921},
+}</pre>
 </div>
 
 <footer>
